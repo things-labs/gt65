@@ -42,8 +42,8 @@ type Control struct {
 	list []*Element
 }
 
-// NewLedControl 创建个新的led控制器
-func NewLedControl() *Control {
+// NewControl 创建个新的led控制器
+func NewControl() *Control {
 	return &Control{}
 }
 
