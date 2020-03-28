@@ -24,16 +24,23 @@ func OpenIO(name string) (*IO, error) {
 	return &IO{f}, nil
 }
 
+func (sf IO) Write(status bool) error {
+	val := byte('0')
+	if status {
+		val = '1'
+	}
+	_, err := sf.f.Write([]byte{val})
+	return err
+}
+
 // On io on
 func (sf IO) On() error {
-	_, err := sf.f.Write([]byte{'1'})
-	return err
+	return sf.Write(true)
 }
 
 // Off io off│
 func (sf IO) Off() error {
-	_, err := sf.f.Write([]byte{'0'})
-	return err
+	return sf.Write(false)
 }
 
 // Close io close

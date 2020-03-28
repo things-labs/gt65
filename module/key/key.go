@@ -1,32 +1,32 @@
-package module
+package key
 
-// PressType 按下类型
-type PressType byte
+// Type 按下类型
+type Type byte
 
 // 按下类型定义
 const (
-	PressDown PressType = iota
+	PressDown Type = iota
 	PressUp
 	PressLong
 )
 
-// KeyElement 按键对象
-type KeyElement struct {
+// Element 按键对象
+type Element struct {
 	FilterTime     int // 滤波时间
 	LongTime       int // 长按时间,0表示不检测长按
 	RepeatSpeed    int // 连击间隔,0表示不支持连击
 	RepeatLongTime int // 如果不支持长按,但支持连击,有个长延时到连击的默认时间。
 	IsDownFunc     func() bool
-	CbFunc         func(PressType)
+	CbFunc         func(Type)
 
 	longRepCnt  int // 长按连击共用计数器
 	filterCount int // 滤波计数器
 	state       int // 状态机
 }
 
-// KeyControl 按键控制器
-type KeyControl struct {
-	list []*KeyElement
+// Control 按键控制器
+type Control struct {
+	list []*Element
 }
 
 const (
@@ -37,19 +37,19 @@ const (
 	stateUp
 )
 
-// NewKeyControl 创建一个按键控制器
-func NewKeyControl() *KeyControl {
-	return &KeyControl{}
+// NewControl 创建一个按键控制器
+func NewControl() *Control {
+	return &Control{}
 }
 
-// RegisterKeyElement 注册一个对象
-func (sf *KeyControl) RegisterKeyElement(elements ...*KeyElement) *KeyControl {
+// AddElement 注册一个对象
+func (sf *Control) AddElement(elements ...*Element) *Control {
 	sf.list = append(sf.list, elements...)
 	return sf
 }
 
 // RunInterval 间隔时间运行
-func (sf *KeyControl) RunInterval(interval int) {
+func (sf *Control) RunInterval(interval int) {
 	defer func() {
 		_ = recover()
 	}()

@@ -1,4 +1,4 @@
-package module
+package led
 
 import (
 	"sync"
@@ -24,8 +24,8 @@ const (
 	FlashCycleTime     = 1000 // ms
 )
 
-// LedElement led对象
-type LedElement struct {
+// Element led对象
+type Element struct {
 	mu        sync.Mutex
 	mode      Mode
 	todo      int
@@ -37,18 +37,18 @@ type LedElement struct {
 	onOffFunc func(bool)
 }
 
-// LedControl led控制器
-type LedControl struct {
-	list []*LedElement
+// Control led控制器
+type Control struct {
+	list []*Element
 }
 
 // NewLedControl 创建个新的led控制器
-func NewLedControl() *LedControl {
-	return &LedControl{}
+func NewLedControl() *Control {
+	return &Control{}
 }
 
-// RegisterLedElement 注册led对象
-func (sf *LedControl) RegisterLedElement(elements ...*LedElement) *LedControl {
+// AddElement 注册led对象
+func (sf *Control) AddElement(elements ...*Element) *Control {
 	sf.list = append(sf.list, elements...)
 	return sf
 }
@@ -57,7 +57,7 @@ func (sf *LedControl) RegisterLedElement(elements ...*LedElement) *LedControl {
 // ModeBlink: 闪烁1次,周期1s,占空比5%
 // ModeFlash: 持烁闪烁,周期1s,占空比5%
 // ModeOn,ModeOff,ModeToggle
-func (sf *LedElement) Set(mode Mode) *LedElement {
+func (sf *Element) Set(mode Mode) *Element {
 	switch mode {
 	case ModeBlink:
 		sf.SetBlink(BlinkTodo, BlinkDutyCycle, FlashCycleTime)
@@ -81,13 +81,13 @@ func (sf *LedElement) Set(mode Mode) *LedElement {
 	return sf
 }
 
-// NewLedElement 创建一个led对象
-func NewLedElement(f func(bool)) *LedElement {
-	return &LedElement{onOffFunc: f}
+// NewElement 创建一个led对象
+func NewElement(f func(bool)) *Element {
+	return &Element{onOffFunc: f}
 }
 
 // SetBlink 设置闪烁
-func (sf *LedElement) SetBlink(numBlinkTodo, duty, period int) *LedElement {
+func (sf *Element) SetBlink(numBlinkTodo, duty, period int) *Element {
 	if duty <= 0 || period <= 0 {
 		sf.Set(ModeOff)
 		return sf
@@ -114,13 +114,13 @@ func (sf *LedElement) SetBlink(numBlinkTodo, duty, period int) *LedElement {
 	return sf
 }
 
-func (sf *LedElement) onOff(val bool) {
+func (sf *Element) onOff(val bool) {
 	sf.curStatus = val
 	sf.onOffFunc(val)
 }
 
 // RunInterval 间隔运行,interval 为运行间隔的值
-func (sf *LedControl) RunInterval(interval int) {
+func (sf *Control) RunInterval(interval int) {
 	var pct int
 
 	for _, v := range sf.list {
