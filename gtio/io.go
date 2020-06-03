@@ -24,6 +24,7 @@ func OpenIO(name string) (*IO, error) {
 	return &IO{f}, nil
 }
 
+// Write io status true: on, false: off
 func (sf IO) Write(status bool) error {
 	val := byte('0')
 	if status {
