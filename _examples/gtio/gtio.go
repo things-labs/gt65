@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/thinkgos/gt65/gtio"
+	"github.com/things-labs/gt65/gtio"
 )
 
 func main() {
