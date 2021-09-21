@@ -17,11 +17,11 @@ const (
 // Config 配置文件网络配置参数
 type Config struct {
 	Auto         bool   `json:"auto"`                                             // 为true忽略其它参数,采用动态ip
-	IPAddress    string `json:"ip_address" binding:"ipv4"`                        // 静态Ip地址
-	NetMask      string `json:"net_mask" binding:"ipv4"`                          // 掩码
-	Gateway      string `json:"gateway" binding:"ipv4"`                           // 网关地址
-	PrimaryDNS   string `json:"primary_dns,omitempty" binding:"ipv4|isdefault"`   // 主DNS服务器
-	SecondaryDNS string `json:"secondary_dns,omitempty" binding:"ipv4|isdefault"` // 次DNS服务器
+	IPAddress    string `json:"ip_address" binding:"required_if=Auth true,ipv4"`  // 静态Ip地址
+	NetMask      string `json:"net_mask" binding:"required_if=Auth true,ipv4"`    // 掩码
+	Gateway      string `json:"gateway" binding:"required_if=Auth true,ipv4"`     // 网关地址
+	PrimaryDNS   string `json:"primary_dns,omitempty" binding:"omitempty,ipv4"`   // 主DNS服务器
+	SecondaryDNS string `json:"secondary_dns,omitempty" binding:"omitempty,ipv4"` // 次DNS服务器
 	Mac          string `json:"-"`                                                // 这个是不准改的
 }
 
